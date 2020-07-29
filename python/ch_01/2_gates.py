@@ -35,8 +35,6 @@ class BinaryGate(LogicGate):
             else:
                 self.pinA = self.pinA.getFrom().getOutput()
 
-        # print("{}: {}".format(self, self.pinA))
-
     def getPinB(self):
         if self.gate is not None:
             self.pinB = self.gate.pinB
@@ -184,5 +182,83 @@ g4 = NotGate("G4")
 g5 = NOrGate("G5")
 g6 = NAndGate("G6")
 g7 = XOrGate("G7")
+# print(g7.getOutput())
 
-print(g7.getOutput())
+"""
+Half-Adder
+"""
+class HalfAdder(BinaryGate):
+    """docstring for HalfAdder."""
+
+    def __init__(self, n, gate=None):
+        super().__init__(n, gate)
+        self.xor = XOrGate(n)
+        self.an = AndGate(n, self.xor)
+
+    def performGateLogic(self):
+        s = self.xor.getOutput()
+        c = self.an.getOutput()
+        self.pinA = self.xor.pinA
+        self.pinB = self.xor.pinB
+        return c, s
+
+a1 = HalfAdder("ADDER")
+print(a1.getOutput())
+
+# TODO: Finish the full-adder
+"""
+Full-Adder
+"""
+class FullAdder(LogicGate):
+    def __init__(self, n, gate=None):
+        super().__init__(n, gate)
+        self.pinA = None
+        self.pinB = None
+        self.pinCin = None
+        self.gate = gate
+
+        self.half1 = HalfAdder(n)
+        self.half2 = HalfAdder(n)
+
+    def getPinA(self):
+        if self.gate is not None:
+            self.pinA = self.gate.pinA
+        else:
+            if self.pinA == None:
+                input_value = int(input("Enter Pin A input for gate " + str(self.getLabel()) + "--->"))
+                input_value = 1 if input_value > 0 else 0
+                self.pinA = input_value
+            else:
+                self.pinA = self.pinA.getFrom().getOutput()
+
+    def getPinB(self):
+        if self.gate is not None:
+            self.pinB = self.gate.pinB
+        else:
+            if self.pinB == None:
+                input_value = int(input("Enter Pin B input for gate " + str(self.getLabel()) + "--->"))
+                input_value = 1 if input_value > 0 else 0
+                self.pinB = input_value
+            else:
+                self.pinB = self.pinB.getFrom().getOutput()
+
+    def getPinC(self):
+        if self.gate is not None:
+            """ NOTE: The connect pin is pinA """
+            self.pinCin = self.gate.pinA
+        else:
+            if self.pinCin == None:
+                input_value = int(input("Enter Pin B input for gate " + str(self.getLabel()) + "--->"))
+                input_value = 1 if input_value > 0 else 0
+                self.pinCin = input_value
+            else:
+                self.pinCin = self.pinCin.getFrom().getOutput()
+
+    def setNextPin(self, source):
+        if self.pinA == None:
+            self.pinA = source
+        else:
+            if self.pinB == None:
+                self.pinB = source
+            else:
+                raise RuntimeError("Error: NO EMPTY PINS")
