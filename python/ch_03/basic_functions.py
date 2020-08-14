@@ -133,6 +133,55 @@ class UnorderedList(object):
         else:
             previous.setNext(current.setNext())
 
+    def append(self, item):
+        total_length = self.length()
+        current = self.head
+        idx = 0
+        while idx < total_length-1:
+            current = current.getNext()
+            idx += 1
+
+        temp = Node(item)
+        current.setNext(temp)
+
+    def insert(self, item, toIdx):
+        current = self.head
+        previous = None
+        idx = 0
+        if toIdx == 0:
+            self.add(item)
+        else:
+            while idx < toIdx:
+                previous = current
+                current = current.getNext()
+                idx += 1
+
+            temp = Node(item)
+            temp.setNext(current)
+            previous.setNext(temp)
+
+    def index(self, item):
+        current = self.head
+        found = False
+        idx = 0
+        while current != None and not found:
+            if current.getData() == item:
+                found = True
+            else:
+                current = current.getNext()
+                idx += 1
+        return idx
+
+    def pop(self):
+        total_length = self.length()
+        current = self.head
+        idx = 0
+        while idx < total_length-2:
+            current = current.getNext()
+            idx += 1
+
+        current.setNext(None)
+
 def main():
     """Stack"""
     # s = Stack()
@@ -185,10 +234,39 @@ def main():
     mylist.add(77)
     mylist.add(17)
     mylist.add(93)
-    mylist.add(31)
-    mylist.add(31)
+    mylist.add(54)
+    mylist.add(26)
     print(mylist.search(17))
+    print(mylist.length())
+    print("-"*10)
+    current = mylist.head
+    for i in range(mylist.length()):
+         print(current.getData())
+         current = current.getNext()
 
+    print("-"*10)
+    mylist.insert(12, 1)
+    current = mylist.head
+    for i in range(mylist.length()):
+         print(current.getData())
+         current = current.getNext()
+
+    print("-"*10)
+    mylist.append(13)
+    current = mylist.head
+    for i in range(mylist.length()):
+         print(current.getData())
+         current = current.getNext()
+
+    print("-"*10)
+    print(mylist.index(77))
+
+    print("-"*10)
+    mylist.pop()
+    current = mylist.head
+    for i in range(mylist.length()):
+         print(current.getData())
+         current = current.getNext()
 
 if __name__ == '__main__':
     main()
