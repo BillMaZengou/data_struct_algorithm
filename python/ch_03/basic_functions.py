@@ -182,6 +182,102 @@ class UnorderedList(object):
 
         current.setNext(None)
 
+class OrderedList(object):
+    """docstring for OrderedList."""
+
+    def __init__(self):
+        super(OrderedList, self).__init__()
+        self.head = None
+
+    def isEmpty(self):
+        return self.head == None
+
+    def length(self):
+        current = self.head
+        count = 0
+        while current != None:
+            count += 1
+            current = current.getNext()
+
+    def search(self, item):
+        current = self.head
+        found = False
+        stop = False
+        while current != None and not found and not stop:
+            if current.getData() == item:
+                found = True
+            else:
+                if current.getData() > item:
+                    stop = True
+                else:
+                    current = current.getNext()
+        return found
+
+    def add(self, item):
+        current = self.head
+        previous = None
+        stop = False
+        while current != None and not stop:
+            if current.getData() > item:
+                stop = True
+            else:
+                previous = current
+                current = current.getNext()
+
+        temp = Node(item)
+        if previous == None:
+            temp.setNext(self.head)
+            self.head = temp
+        else:
+            temp.setNext(current)
+            previous.setNext(temp)
+
+    def length(self):
+        current = self.head
+        count = 0
+        while current != None:
+            count += 1
+            current = current.getNext()
+        return count
+
+    def remove(self, item):
+        current = self.head
+        previous = None
+        found = False
+        while not found:
+            if current.getData() == item:
+                found = True
+            else:
+                previous = current
+                current = current.getNext()
+
+        if previous == None:
+            self.head = current.getNext()
+        else:
+            previous.setNext(current.setNext())
+
+    def index(self, item):
+        current = self.head
+        found = False
+        idx = 0
+        while current != None and not found:
+            if current.getData() == item:
+                found = True
+            else:
+                current = current.getNext()
+                idx += 1
+        return idx
+
+    def pop(self):
+        total_length = self.length()
+        current = self.head
+        idx = 0
+        while idx < total_length-2:
+            current = current.getNext()
+            idx += 1
+
+        current.setNext(None)
+
 def main():
     """Stack"""
     # s = Stack()
@@ -229,7 +325,47 @@ def main():
     # print(temp.getNext())
 
     """Unordered List"""
-    mylist = UnorderedList()
+    # mylist = UnorderedList()
+    # mylist.add(31)
+    # mylist.add(77)
+    # mylist.add(17)
+    # mylist.add(93)
+    # mylist.add(54)
+    # mylist.add(26)
+    # print(mylist.search(17))
+    # print(mylist.length())
+    # print("-"*10)
+    # current = mylist.head
+    # for i in range(mylist.length()):
+    #      print(current.getData())
+    #      current = current.getNext()
+    #
+    # print("-"*10)
+    # mylist.insert(12, 1)
+    # current = mylist.head
+    # for i in range(mylist.length()):
+    #      print(current.getData())
+    #      current = current.getNext()
+    #
+    # print("-"*10)
+    # mylist.append(13)
+    # current = mylist.head
+    # for i in range(mylist.length()):
+    #      print(current.getData())
+    #      current = current.getNext()
+    #
+    # print("-"*10)
+    # print(mylist.index(77))
+    #
+    # print("-"*10)
+    # mylist.pop()
+    # current = mylist.head
+    # for i in range(mylist.length()):
+    #      print(current.getData())
+    #      current = current.getNext()
+
+    """Ordered List"""
+    mylist = OrderedList()
     mylist.add(31)
     mylist.add(77)
     mylist.add(17)
@@ -245,14 +381,14 @@ def main():
          current = current.getNext()
 
     print("-"*10)
-    mylist.insert(12, 1)
+    mylist.add(55)
     current = mylist.head
     for i in range(mylist.length()):
          print(current.getData())
          current = current.getNext()
 
     print("-"*10)
-    mylist.append(13)
+    mylist.add(13)
     current = mylist.head
     for i in range(mylist.length()):
          print(current.getData())
